@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">BQTest</string>
+    <!-- Login Screen -->
+    <string name="login_title">Evernote client</string>
+    <string name="login_user_name">User Name</string>
+    <string name="login_user_password">User Password</string>
+    <string name="login_continue">Continue</string>
+
+</resources>
