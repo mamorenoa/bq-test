@@ -1,9 +1,17 @@
 <resources>
+    <!-- General -->
     <string name="app_name">BQTest</string>
+    <string name="connection_error">Connection Error</string>
+
     <!-- Login Screen -->
     <string name="login_title">Evernote client</string>
-    <string name="login_user_name">User Name</string>
-    <string name="login_user_password">User Password</string>
-    <string name="login_continue">Continue</string>
+    <string name="login_button">Login</string>
+    <string name="login_error">Error Login</string>
+
+    <!-- List Notes Screen -->
+    <string name="notes_user_logged">%s has logged into Evernote</string>
+    <string name="notes_user_logged_without_name">You have logged into Evernote</string>
+
+    <!-- Details Note Screen -->
 
 </resources>
