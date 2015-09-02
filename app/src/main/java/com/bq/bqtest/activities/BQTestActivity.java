@@ -15,12 +15,10 @@ import com.bq.bqtest.data.SingleData;
 public class BQTestActivity extends AppCompatActivity
 {
     public FragmentManager mFragmentManager;
-    public SingleData mSingleData;
 
     public void onCreate(Bundle bundle)
     {
         super.onCreate(bundle);
-        mSingleData = SingleData.getInstance();
         mFragmentManager = getSupportFragmentManager();
     }
 

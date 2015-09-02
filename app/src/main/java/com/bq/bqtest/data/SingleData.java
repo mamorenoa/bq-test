@@ -11,7 +11,7 @@ public class SingleData
     public static SingleData instance;
 
     private EvernoteSession mEvernoteSession;
-    private EvernoteHelper mEvernoteHelper;
+    private EvernoteHelper mEvernoteHelper = new EvernoteHelper();
 
     public static SingleData getInstance()
     {
@@ -35,10 +35,5 @@ public class SingleData
     public EvernoteHelper getmEvernoteHelper()
     {
         return mEvernoteHelper;
-    }
-
-    public void setmEvernoteHelper(EvernoteHelper mEvernoteHelper)
-    {
-        this.mEvernoteHelper = mEvernoteHelper;
     }
 }

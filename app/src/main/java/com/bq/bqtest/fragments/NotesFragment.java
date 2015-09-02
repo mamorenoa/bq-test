@@ -12,7 +12,10 @@ import com.bq.bqtest.data.SingleData;
 import com.bq.bqtest.helpers.EvernoteHelper;
 import com.bq.bqtest.interfaces.IEvernoteHelperResultListener;
 import com.evernote.client.android.EvernoteSession;
+import com.evernote.edam.type.Notebook;
 import com.evernote.edam.type.User;
+
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.BindString;
@@ -38,7 +41,10 @@ public class NotesFragment extends BQTestFragment
 
     private EvernoteSession mEvernoteSession;
     private EvernoteHelper mEvernoteHelper;
+
+    //Data
     private User mUser;
+    private List<Notebook> mListNotebooks;
 
     public static NotesFragment newInstance()
     {
@@ -54,7 +60,8 @@ public class NotesFragment extends BQTestFragment
         ButterKnife.bind(this, mViewFragment);
         mEvernoteHelper = SingleData.getInstance().getmEvernoteHelper();
         mEvernoteSession = SingleData.getInstance().getmEvernoteSession();
-        showUserLoginInfo();
+        getUserLoginInfo();
+        getUserNotebooks();
         return mViewFragment;
     }
 
@@ -69,7 +76,7 @@ public class NotesFragment extends BQTestFragment
         super.onCreate(savedInstanceState);
     }
 
-    private void showUserLoginInfo()
+    private void getUserLoginInfo()
     {
         mEvernoteHelper.getUserInfo(mActivity, mEvernoteSession, new IEvernoteHelperResultListener()
         {
@@ -102,5 +109,34 @@ public class NotesFragment extends BQTestFragment
         });
     }
 
+    private void getUserNotebooks()
+    {
+        mEvernoteHelper.getUserNotebooks(mActivity, mEvernoteSession, new IEvernoteHelperResultListener()
+        {
+            @Override
+            public void onResult(Object result)
+            {
+                mListNotebooks = (List<Notebook>)result;
+            }
+
+            @Override
+            public void onError(String error)
+            {
+
+            }
+
+            @Override
+            public void onException(String exception)
+            {
+
+            }
+
+            @Override
+            public void onConnectionError()
+            {
+
+            }
+        });
+    }
 }
 

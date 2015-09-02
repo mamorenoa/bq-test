@@ -13,4 +13,6 @@ public interface IEvernoteHelper
 {
     void loginUser(Context context, EvernoteSession session);
     void getUserInfo(Context context, EvernoteSession session, IEvernoteHelperResultListener listener);
+    void getUserNotebooks(Context context, EvernoteSession session, IEvernoteHelperResultListener listener);
+
 }
