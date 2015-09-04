@@ -40,12 +40,6 @@ public class DetailNoteFragment extends BQTestFragment
         return mViewFragment;
     }
 
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState)
-    {
-        super.onActivityCreated(savedInstanceState);
-    }
-
     public void showDetailNote()
     {
         mTvTitle.setText(mTitleStr);
