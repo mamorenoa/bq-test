@@ -9,7 +9,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,6 +54,7 @@ public class NotesFragment extends BQTestFragment
     //Data
     private User mUser;
     private List<Notebook> mListNotebooks;
+    private List<Note> mListNotes;
 
     //Data Managers
     private EvernoteSession mEvernoteSession;
@@ -74,11 +74,12 @@ public class NotesFragment extends BQTestFragment
         @Override
         public void onItemClicked(View view, int position)
         {
-            Log.d("DEBUG", "Card clicked " + position);
             FragmentTransaction ft = mActivity.getSupportFragmentManager().beginTransaction();
             DetailNoteFragment cf = new DetailNoteFragment();
             Bundle args = new Bundle();
-            //args.putString("note", CitiesFragment.CITY_TYPE.ORIG);
+            args.putString("title", mListNotes.get(position).getTitle());
+            args.putString("content", mListNotes.get(position).getContent());
+            args.putLong("date", mListNotes.get(position).getCreated());
             cf.setArguments(args);
             ft.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right, R.anim.slide_out_left, R.anim.slide_out_right);
             ft.add(R.id.main, cf, NotesFragment.class.getSimpleName());
@@ -236,11 +237,12 @@ public class NotesFragment extends BQTestFragment
 
     private void showListNotes(List<Note> listNotes)
     {
+        mListNotes = listNotes;
         mLayoutManager = new LinearLayoutManager(mActivity);
         mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mRecyclerView.setHasFixedSize(true);
-        mAdapter = new NotesAdapter(listNotes, onItemClickCallback, mActivity);
+        mAdapter = new NotesAdapter(mListNotes, onItemClickCallback, mActivity);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(mLayoutManager);
     }
@@ -249,7 +251,7 @@ public class NotesFragment extends BQTestFragment
     public void addNewNote()
     {
         FragmentTransaction ft = mActivity.getSupportFragmentManager().beginTransaction();
-        DetailNoteFragment cf = new DetailNoteFragment();
+        CreateNoteFragment cf = new CreateNoteFragment();
         Bundle args = new Bundle();
         cf.setArguments(args);
         ft.setCustomAnimations(R.anim.slide_in_bottom, R.anim.slide_out_bottom, R.anim.slide_out_top, R.anim.slide_out_bottom);
