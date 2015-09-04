@@ -2,21 +2,35 @@ package com.bq.bqtest.fragments;
 
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.bq.bqtest.R;
+import com.bq.bqtest.adapters.NotesAdapter;
 import com.bq.bqtest.data.SingleData;
 import com.bq.bqtest.helpers.EvernoteHelper;
 import com.bq.bqtest.interfaces.IEvernoteHelperResultListener;
+import com.bq.bqtest.utils.OnItemClickListener;
 import com.evernote.client.android.EvernoteSession;
+import com.evernote.edam.type.Note;
+import com.evernote.edam.type.Notebook;
 import com.evernote.edam.type.User;
+
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.BindString;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by miguelangel on 1/9/15.
@@ -27,6 +41,24 @@ public class NotesFragment extends BQTestFragment
     //Views
     @Bind(R.id.coordinatorContent)
     CoordinatorLayout mCoordinatorContent;
+    @Bind(R.id.recyclerCards)
+    RecyclerView mRecyclerView;
+    @Bind(R.id.addNote)
+    FloatingActionButton mFloatingActionBt;
+    @Bind(R.id.swipeRefreshLayout)
+    SwipeRefreshLayout mSwipeRefreshLayout;
+
+    //View Managers
+    private RecyclerView.Adapter mAdapter;
+    private LinearLayoutManager mLayoutManager;
+
+    //Data
+    private User mUser;
+    private List<Notebook> mListNotebooks;
+
+    //Data Managers
+    private EvernoteSession mEvernoteSession;
+    private EvernoteHelper mEvernoteHelper;
 
     //Strings
     @BindString(R.string.notes_user_logged)
@@ -36,9 +68,25 @@ public class NotesFragment extends BQTestFragment
     @BindString(R.string.connection_error)
     String mStrConnectionError;
 
-    private EvernoteSession mEvernoteSession;
-    private EvernoteHelper mEvernoteHelper;
-    private User mUser;
+    //Cards Listener
+    private OnItemClickListener.OnItemClickCallback onItemClickCallback = new OnItemClickListener.OnItemClickCallback()
+    {
+        @Override
+        public void onItemClicked(View view, int position)
+        {
+            Log.d("DEBUG", "Card clicked " + position);
+            FragmentTransaction ft = mActivity.getSupportFragmentManager().beginTransaction();
+            DetailNoteFragment cf = new DetailNoteFragment();
+            Bundle args = new Bundle();
+            //args.putString("note", CitiesFragment.CITY_TYPE.ORIG);
+            cf.setArguments(args);
+            ft.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right, R.anim.slide_out_left, R.anim.slide_out_right);
+            ft.add(R.id.main, cf, NotesFragment.class.getSimpleName());
+            ft.addToBackStack(NotesFragment.class.getSimpleName());
+            ft.commit();
+        }
+    };
+
 
     public static NotesFragment newInstance()
     {
@@ -54,7 +102,9 @@ public class NotesFragment extends BQTestFragment
         ButterKnife.bind(this, mViewFragment);
         mEvernoteHelper = SingleData.getInstance().getmEvernoteHelper();
         mEvernoteSession = SingleData.getInstance().getmEvernoteSession();
-        showUserLoginInfo();
+        getUserLoginInfo();
+        getUserNotebooks();
+        setRefreshLayout();
         return mViewFragment;
     }
 
@@ -69,7 +119,19 @@ public class NotesFragment extends BQTestFragment
         super.onCreate(savedInstanceState);
     }
 
-    private void showUserLoginInfo()
+    private void setRefreshLayout()
+    {
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener()
+        {
+            @Override
+            public void onRefresh()
+            {
+                getUserNotebooks();
+            }
+        });
+    }
+
+    private void getUserLoginInfo()
     {
         mEvernoteHelper.getUserInfo(mActivity, mEvernoteSession, new IEvernoteHelperResultListener()
         {
@@ -97,10 +159,103 @@ public class NotesFragment extends BQTestFragment
             public void onConnectionError()
             {
                 Snackbar.make(mCoordinatorContent, mStrConnectionError, Snackbar.LENGTH_LONG).show();
-
             }
         });
     }
 
+    private void getUserNotebooks()
+    {
+        mEvernoteHelper.getUserNotebooks(mActivity, mEvernoteSession, new IEvernoteHelperResultListener()
+        {
+            @Override
+            public void onResult(Object result)
+            {
+                mListNotebooks = (List<Notebook>) result;
+                getUserNotes();
+            }
+
+            @Override
+            public void onError(String error)
+            {
+                Snackbar.make(mCoordinatorContent, error, Snackbar.LENGTH_LONG).show();
+
+            }
+
+            @Override
+            public void onException(String exception)
+            {
+                Snackbar.make(mCoordinatorContent, exception, Snackbar.LENGTH_LONG).show();
+
+            }
+
+            @Override
+            public void onConnectionError()
+            {
+                Snackbar.make(mCoordinatorContent, mStrConnectionError, Snackbar.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    private void getUserNotes()
+    {
+        for (Notebook notebook : mListNotebooks)
+        {
+            mEvernoteHelper.getUserNotes(mActivity, mEvernoteSession, notebook, new IEvernoteHelperResultListener()
+            {
+                @Override
+                public void onResult(Object result)
+                {
+                    List<Note> listNotes = (List<Note>) result;
+                    showListNotes(listNotes);
+                    if (mSwipeRefreshLayout.isRefreshing())
+                    {
+                        mSwipeRefreshLayout.setRefreshing(false);
+                    }
+                }
+
+                @Override
+                public void onError(String error)
+                {
+                    Snackbar.make(mCoordinatorContent, error, Snackbar.LENGTH_LONG).show();
+                }
+
+                @Override
+                public void onException(String exception)
+                {
+                    Snackbar.make(mCoordinatorContent, exception, Snackbar.LENGTH_LONG).show();
+                }
+
+                @Override
+                public void onConnectionError()
+                {
+                    Snackbar.make(mCoordinatorContent, mStrConnectionError, Snackbar.LENGTH_LONG).show();
+                }
+            });
+        }
+    }
+
+    private void showListNotes(List<Note> listNotes)
+    {
+        mLayoutManager = new LinearLayoutManager(mActivity);
+        mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        mRecyclerView.setHasFixedSize(true);
+        mAdapter = new NotesAdapter(listNotes, onItemClickCallback, mActivity);
+        mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+    }
+
+    @OnClick(R.id.addNote)
+    public void addNewNote()
+    {
+        FragmentTransaction ft = mActivity.getSupportFragmentManager().beginTransaction();
+        DetailNoteFragment cf = new DetailNoteFragment();
+        Bundle args = new Bundle();
+        cf.setArguments(args);
+        ft.setCustomAnimations(R.anim.slide_in_bottom, R.anim.slide_out_bottom, R.anim.slide_out_top, R.anim.slide_out_bottom);
+        ft.add(R.id.main, cf, NotesFragment.class.getSimpleName());
+        ft.addToBackStack(NotesFragment.class.getSimpleName());
+        ft.commit();
+    }
 }
 

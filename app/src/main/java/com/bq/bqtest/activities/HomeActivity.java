@@ -6,6 +6,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentTransaction;
 
 import com.bq.bqtest.R;
+import com.bq.bqtest.data.SingleData;
 import com.bq.bqtest.fragments.BQTestFragment;
 import com.bq.bqtest.fragments.LoginFragment;
 import com.bq.bqtest.fragments.NotesFragment;
@@ -38,7 +39,7 @@ public class HomeActivity extends BQTestActivity implements EvernoteLoginFragmen
     private void initFragment()
     {
         BQTestFragment fragment;
-        if (mSingleData.getmEvernoteSession().isLoggedIn())
+        if (SingleData.getInstance().getmEvernoteSession().isLoggedIn())
         {
             fragment = NotesFragment.newInstance();
         }

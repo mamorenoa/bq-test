@@ -11,4 +11,8 @@
     <!-- Login Screen -->
     <dimen name="login_title">30sp</dimen>
     <dimen name="login_hint">20sp</dimen>
+
+    <!-- Cards Screen -->
+    <dimen name="card_height">100dp</dimen>
+
 </resources>

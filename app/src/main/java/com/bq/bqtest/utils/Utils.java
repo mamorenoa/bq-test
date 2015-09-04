@@ -3,7 +3,11 @@ package com.bq.bqtest.utils;
 import android.content.Context;
 import android.content.res.Resources;
 import android.net.ConnectivityManager;
+import android.text.format.DateFormat;
 import android.util.DisplayMetrics;
+
+import java.util.Calendar;
+import java.util.Locale;
 
 public class Utils
 {
@@ -35,5 +39,13 @@ public class Utils
         DisplayMetrics metrics = resources.getDisplayMetrics();
         float dp = px / (metrics.densityDpi / 160f);
         return dp;
+    }
+
+    public static String getDate(long time)
+    {
+        Calendar cal = Calendar.getInstance(Locale.ENGLISH);
+        cal.setTimeInMillis(time);
+        String date = DateFormat.format("dd-MM-yyyy", cal).toString();
+        return date;
     }
 }

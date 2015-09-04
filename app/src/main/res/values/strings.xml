@@ -1,6 +1,6 @@
 <resources>
     <!-- General -->
-    <string name="app_name">BQTest</string>
+    <string name="app_name">Test</string>
     <string name="connection_error">Connection Error</string>
 
     <!-- Login Screen -->
@@ -11,6 +11,7 @@
     <!-- List Notes Screen -->
     <string name="notes_user_logged">%s has logged into Evernote</string>
     <string name="notes_user_logged_without_name">You have logged into Evernote</string>
+    <string name="notes_date">Created at %s</string>
 
     <!-- Details Note Screen -->
 
