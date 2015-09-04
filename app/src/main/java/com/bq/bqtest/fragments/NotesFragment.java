@@ -2,7 +2,10 @@ package com.bq.bqtest.fragments;
 
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -27,6 +30,7 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.BindString;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by miguelangel on 1/9/15.
@@ -39,6 +43,10 @@ public class NotesFragment extends BQTestFragment
     CoordinatorLayout mCoordinatorContent;
     @Bind(R.id.recyclerCards)
     RecyclerView mRecyclerView;
+    @Bind(R.id.addNote)
+    FloatingActionButton mFloatingActionBt;
+    @Bind(R.id.swipeRefreshLayout)
+    SwipeRefreshLayout mSwipeRefreshLayout;
 
     //View Managers
     private RecyclerView.Adapter mAdapter;
@@ -67,6 +75,15 @@ public class NotesFragment extends BQTestFragment
         public void onItemClicked(View view, int position)
         {
             Log.d("DEBUG", "Card clicked " + position);
+            FragmentTransaction ft = mActivity.getSupportFragmentManager().beginTransaction();
+            DetailNoteFragment cf = new DetailNoteFragment();
+            Bundle args = new Bundle();
+            //args.putString("note", CitiesFragment.CITY_TYPE.ORIG);
+            cf.setArguments(args);
+            ft.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right, R.anim.slide_out_left, R.anim.slide_out_right);
+            ft.add(R.id.main, cf, NotesFragment.class.getSimpleName());
+            ft.addToBackStack(NotesFragment.class.getSimpleName());
+            ft.commit();
         }
     };
 
@@ -87,12 +104,8 @@ public class NotesFragment extends BQTestFragment
         mEvernoteSession = SingleData.getInstance().getmEvernoteSession();
         getUserLoginInfo();
         getUserNotebooks();
+        setRefreshLayout();
         return mViewFragment;
-    }
-
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState)
-    {
     }
 
     @Override
@@ -104,6 +117,18 @@ public class NotesFragment extends BQTestFragment
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+    }
+
+    private void setRefreshLayout()
+    {
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener()
+        {
+            @Override
+            public void onRefresh()
+            {
+                getUserNotebooks();
+            }
+        });
     }
 
     private void getUserLoginInfo()
@@ -182,6 +207,10 @@ public class NotesFragment extends BQTestFragment
                 {
                     List<Note> listNotes = (List<Note>) result;
                     showListNotes(listNotes);
+                    if (mSwipeRefreshLayout.isRefreshing())
+                    {
+                        mSwipeRefreshLayout.setRefreshing(false);
+                    }
                 }
 
                 @Override
@@ -214,7 +243,19 @@ public class NotesFragment extends BQTestFragment
         mAdapter = new NotesAdapter(listNotes, onItemClickCallback, mActivity);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(mLayoutManager);
+    }
 
+    @OnClick(R.id.addNote)
+    public void addNewNote()
+    {
+        FragmentTransaction ft = mActivity.getSupportFragmentManager().beginTransaction();
+        DetailNoteFragment cf = new DetailNoteFragment();
+        Bundle args = new Bundle();
+        cf.setArguments(args);
+        ft.setCustomAnimations(R.anim.slide_in_bottom, R.anim.slide_out_bottom, R.anim.slide_out_top, R.anim.slide_out_bottom);
+        ft.add(R.id.main, cf, NotesFragment.class.getSimpleName());
+        ft.addToBackStack(NotesFragment.class.getSimpleName());
+        ft.commit();
     }
 }
 

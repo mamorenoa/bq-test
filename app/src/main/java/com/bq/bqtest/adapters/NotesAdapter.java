@@ -16,7 +16,6 @@ import com.evernote.edam.type.Note;
 import java.util.List;
 
 import butterknife.Bind;
-import butterknife.BindString;
 import butterknife.ButterKnife;
 
 /**
@@ -57,7 +56,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder>
     {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.note_layout, parent, false);
         CoordinatorLayout.LayoutParams layoutParams = new CoordinatorLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        int margin = (int)Utils.convertDpToPixel(10, mContext);
+        int margin = (int) Utils.convertDpToPixel(10, mContext);
         layoutParams.setMargins(margin, margin, margin, margin);
         v.setLayoutParams(layoutParams);
         ViewHolder vh = new ViewHolder(v);
