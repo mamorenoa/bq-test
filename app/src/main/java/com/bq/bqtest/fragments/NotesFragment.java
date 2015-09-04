@@ -6,6 +6,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ import com.bq.bqtest.adapters.NotesAdapter;
 import com.bq.bqtest.data.SingleData;
 import com.bq.bqtest.helpers.EvernoteHelper;
 import com.bq.bqtest.interfaces.IEvernoteHelperResultListener;
+import com.bq.bqtest.utils.OnItemClickListener;
 import com.evernote.client.android.EvernoteSession;
 import com.evernote.edam.type.Note;
 import com.evernote.edam.type.Notebook;
@@ -58,6 +60,16 @@ public class NotesFragment extends BQTestFragment
     @BindString(R.string.connection_error)
     String mStrConnectionError;
 
+    //Cards Listener
+    private OnItemClickListener.OnItemClickCallback onItemClickCallback = new OnItemClickListener.OnItemClickCallback()
+    {
+        @Override
+        public void onItemClicked(View view, int position)
+        {
+            Log.d("DEBUG", "Card clicked " + position);
+        }
+    };
+
 
     public static NotesFragment newInstance()
     {
@@ -73,7 +85,6 @@ public class NotesFragment extends BQTestFragment
         ButterKnife.bind(this, mViewFragment);
         mEvernoteHelper = SingleData.getInstance().getmEvernoteHelper();
         mEvernoteSession = SingleData.getInstance().getmEvernoteSession();
-
         getUserLoginInfo();
         getUserNotebooks();
         return mViewFragment;
@@ -200,9 +211,10 @@ public class NotesFragment extends BQTestFragment
         mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mRecyclerView.setHasFixedSize(true);
-        mAdapter = new NotesAdapter(listNotes, mActivity);
+        mAdapter = new NotesAdapter(listNotes, onItemClickCallback, mActivity);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(mLayoutManager);
+
     }
 }
 

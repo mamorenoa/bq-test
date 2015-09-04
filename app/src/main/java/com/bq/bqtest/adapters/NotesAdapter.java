@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.bq.bqtest.R;
+import com.bq.bqtest.utils.OnItemClickListener;
 import com.bq.bqtest.utils.Utils;
 import com.evernote.edam.type.Note;
 
@@ -25,6 +26,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder>
 {
     private List<Note> mListNotes;
     private Context mContext;
+    private OnItemClickListener.OnItemClickCallback mClickListenerCallback;
 
     public static class ViewHolder extends RecyclerView.ViewHolder
     {
@@ -32,19 +34,23 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder>
         public TextView mTvTitle;
         @Bind(R.id.tvDate)
         public TextView mTvDate;
+        public View mViewParent;
 
         public ViewHolder(View v)
         {
             super(v);
             ButterKnife.bind(this, v);
+            mViewParent = v;
         }
     }
 
-    public NotesAdapter(List<Note> listNotes, Context context)
+    public NotesAdapter(List<Note> listNotes, OnItemClickListener.OnItemClickCallback clickCallback, Context context)
     {
         mListNotes = listNotes;
+        mClickListenerCallback = clickCallback;
         mContext = context;
     }
+
 
     @Override
     public NotesAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
@@ -64,6 +70,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder>
         Note note = mListNotes.get(position);
         holder.mTvTitle.setText(note.getTitle());
         holder.mTvDate.setText(String.format(holder.mTvDate.getText().toString(), Utils.getDate(note.getCreated())));
+        holder.mViewParent.setOnClickListener(new OnItemClickListener(position, mClickListenerCallback));
     }
 
     @Override
