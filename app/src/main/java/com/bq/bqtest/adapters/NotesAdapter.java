@@ -1,0 +1,74 @@
+package com.bq.bqtest.adapters;
+
+import android.content.Context;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+
+import com.bq.bqtest.R;
+import com.bq.bqtest.utils.Utils;
+import com.evernote.edam.type.Note;
+
+import java.util.List;
+
+/**
+ * Created by miguelangel on 3/9/15.
+ */
+public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder>
+{
+    private List<Note> mListNotes;
+    private Context mContext;
+
+    public static class ViewHolder extends RecyclerView.ViewHolder
+    {
+        public View mRelativeCard;
+        public TextView mTvTitle;
+        public TextView mTvDate;
+        public TextView mTvDesc;
+
+        public ViewHolder(View v)
+        {
+            super(v);
+            mRelativeCard = v;
+            mTvTitle = (TextView) mRelativeCard.findViewById(R.id.tvTitle);
+            mTvDate = (TextView) mRelativeCard.findViewById(R.id.tvDate);
+            mTvDesc = (TextView) mRelativeCard.findViewById(R.id.tvShortDesc);
+        }
+    }
+
+    public NotesAdapter(List<Note> listNotes, Context context)
+    {
+        mListNotes = listNotes;
+        mContext = context;
+    }
+
+    @Override
+    public NotesAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
+    {
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.note_layout, parent, false);
+        CoordinatorLayout.LayoutParams layoutParams = new CoordinatorLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        int margin = (int)Utils.convertDpToPixel(10, mContext);
+        layoutParams.setMargins(margin, margin, margin, margin);
+        v.setLayoutParams(layoutParams);
+        ViewHolder vh = new ViewHolder(v);
+        return vh;
+    }
+
+    @Override
+    public void onBindViewHolder(ViewHolder holder, int position)
+    {
+        Note note = mListNotes.get(position);
+        holder.mTvTitle.setText(note.getTitle());
+        holder.mTvDate.setText(Utils.getDate(note.getCreated()));
+        holder.mTvDesc.setText(note.getContent());
+    }
+
+    @Override
+    public int getItemCount()
+    {
+        return mListNotes.size();
+    }
+}

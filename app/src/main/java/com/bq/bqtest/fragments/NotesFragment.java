@@ -3,15 +3,21 @@ package com.bq.bqtest.fragments;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.bq.bqtest.R;
+import com.bq.bqtest.adapters.NotesAdapter;
 import com.bq.bqtest.data.SingleData;
 import com.bq.bqtest.helpers.EvernoteHelper;
 import com.bq.bqtest.interfaces.IEvernoteHelperResultListener;
 import com.evernote.client.android.EvernoteSession;
+import com.evernote.client.android.type.NoteRef;
+import com.evernote.edam.type.Note;
 import com.evernote.edam.type.Notebook;
 import com.evernote.edam.type.User;
 
@@ -31,6 +37,18 @@ public class NotesFragment extends BQTestFragment
     @Bind(R.id.coordinatorContent)
     CoordinatorLayout mCoordinatorContent;
 
+    //View Managers
+    private RecyclerView.Adapter mAdapter;
+    private LinearLayoutManager mLayoutManager;
+
+    //Data
+    private User mUser;
+    private List<Notebook> mListNotebooks;
+
+    //Data Managers
+    private EvernoteSession mEvernoteSession;
+    private EvernoteHelper mEvernoteHelper;
+
     //Strings
     @BindString(R.string.notes_user_logged)
     String mStrUserLogged;
@@ -39,12 +57,7 @@ public class NotesFragment extends BQTestFragment
     @BindString(R.string.connection_error)
     String mStrConnectionError;
 
-    private EvernoteSession mEvernoteSession;
-    private EvernoteHelper mEvernoteHelper;
-
-    //Data
-    private User mUser;
-    private List<Notebook> mListNotebooks;
+    private RecyclerView mRecyclerView;
 
     public static NotesFragment newInstance()
     {
@@ -60,9 +73,15 @@ public class NotesFragment extends BQTestFragment
         ButterKnife.bind(this, mViewFragment);
         mEvernoteHelper = SingleData.getInstance().getmEvernoteHelper();
         mEvernoteSession = SingleData.getInstance().getmEvernoteSession();
+
         getUserLoginInfo();
         getUserNotebooks();
         return mViewFragment;
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState)
+    {
     }
 
     @Override
@@ -104,7 +123,6 @@ public class NotesFragment extends BQTestFragment
             public void onConnectionError()
             {
                 Snackbar.make(mCoordinatorContent, mStrConnectionError, Snackbar.LENGTH_LONG).show();
-
             }
         });
     }
@@ -116,7 +134,8 @@ public class NotesFragment extends BQTestFragment
             @Override
             public void onResult(Object result)
             {
-                mListNotebooks = (List<Notebook>)result;
+                mListNotebooks = (List<Notebook>) result;
+                getUserNotes();
             }
 
             @Override
@@ -137,6 +156,52 @@ public class NotesFragment extends BQTestFragment
 
             }
         });
+    }
+
+    private void getUserNotes()
+    {
+        for (Notebook notebook : mListNotebooks)
+        {
+            mEvernoteHelper.getUserNotes(mActivity, mEvernoteSession, notebook, new IEvernoteHelperResultListener()
+            {
+                @Override
+                public void onResult(Object result)
+                {
+                    List<Note> listNotes = (List<Note>) result;
+                    showListNotes(listNotes);
+                }
+
+                @Override
+                public void onError(String error)
+                {
+
+                }
+
+                @Override
+                public void onException(String exception)
+                {
+
+                }
+
+                @Override
+                public void onConnectionError()
+                {
+
+                }
+            });
+        }
+    }
+
+    private void showListNotes(List<Note> listNotes)
+    {
+        mRecyclerView = (RecyclerView) mViewFragment.findViewById(R.id.recyclerCards);
+        mLayoutManager = new LinearLayoutManager(mActivity);
+        mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        mRecyclerView.setHasFixedSize(true);
+        mAdapter = new NotesAdapter(listNotes, mActivity);
+        mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.setLayoutManager(mLayoutManager);
     }
 }
 
