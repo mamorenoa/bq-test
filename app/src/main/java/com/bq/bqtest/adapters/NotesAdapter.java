@@ -14,6 +14,10 @@ import com.evernote.edam.type.Note;
 
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.BindString;
+import butterknife.ButterKnife;
+
 /**
  * Created by miguelangel on 3/9/15.
  */
@@ -24,18 +28,15 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder>
 
     public static class ViewHolder extends RecyclerView.ViewHolder
     {
-        public View mRelativeCard;
+        @Bind(R.id.tvTitle)
         public TextView mTvTitle;
+        @Bind(R.id.tvDate)
         public TextView mTvDate;
-        public TextView mTvDesc;
 
         public ViewHolder(View v)
         {
             super(v);
-            mRelativeCard = v;
-            mTvTitle = (TextView) mRelativeCard.findViewById(R.id.tvTitle);
-            mTvDate = (TextView) mRelativeCard.findViewById(R.id.tvDate);
-            mTvDesc = (TextView) mRelativeCard.findViewById(R.id.tvShortDesc);
+            ButterKnife.bind(this, v);
         }
     }
 
@@ -62,8 +63,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder>
     {
         Note note = mListNotes.get(position);
         holder.mTvTitle.setText(note.getTitle());
-        holder.mTvDate.setText(Utils.getDate(note.getCreated()));
-        holder.mTvDesc.setText(note.getContent());
+        holder.mTvDate.setText(String.format(holder.mTvDate.getText().toString(), Utils.getDate(note.getCreated())));
     }
 
     @Override

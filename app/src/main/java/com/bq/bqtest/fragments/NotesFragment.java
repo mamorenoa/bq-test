@@ -16,7 +16,6 @@ import com.bq.bqtest.data.SingleData;
 import com.bq.bqtest.helpers.EvernoteHelper;
 import com.bq.bqtest.interfaces.IEvernoteHelperResultListener;
 import com.evernote.client.android.EvernoteSession;
-import com.evernote.client.android.type.NoteRef;
 import com.evernote.edam.type.Note;
 import com.evernote.edam.type.Notebook;
 import com.evernote.edam.type.User;
@@ -36,6 +35,8 @@ public class NotesFragment extends BQTestFragment
     //Views
     @Bind(R.id.coordinatorContent)
     CoordinatorLayout mCoordinatorContent;
+    @Bind(R.id.recyclerCards)
+    RecyclerView mRecyclerView;
 
     //View Managers
     private RecyclerView.Adapter mAdapter;
@@ -57,7 +58,6 @@ public class NotesFragment extends BQTestFragment
     @BindString(R.string.connection_error)
     String mStrConnectionError;
 
-    private RecyclerView mRecyclerView;
 
     public static NotesFragment newInstance()
     {
@@ -141,19 +141,21 @@ public class NotesFragment extends BQTestFragment
             @Override
             public void onError(String error)
             {
+                Snackbar.make(mCoordinatorContent, error, Snackbar.LENGTH_LONG).show();
 
             }
 
             @Override
             public void onException(String exception)
             {
+                Snackbar.make(mCoordinatorContent, exception, Snackbar.LENGTH_LONG).show();
 
             }
 
             @Override
             public void onConnectionError()
             {
-
+                Snackbar.make(mCoordinatorContent, mStrConnectionError, Snackbar.LENGTH_LONG).show();
             }
         });
     }
@@ -174,19 +176,19 @@ public class NotesFragment extends BQTestFragment
                 @Override
                 public void onError(String error)
                 {
-
+                    Snackbar.make(mCoordinatorContent, error, Snackbar.LENGTH_LONG).show();
                 }
 
                 @Override
                 public void onException(String exception)
                 {
-
+                    Snackbar.make(mCoordinatorContent, exception, Snackbar.LENGTH_LONG).show();
                 }
 
                 @Override
                 public void onConnectionError()
                 {
-
+                    Snackbar.make(mCoordinatorContent, mStrConnectionError, Snackbar.LENGTH_LONG).show();
                 }
             });
         }
@@ -194,7 +196,6 @@ public class NotesFragment extends BQTestFragment
 
     private void showListNotes(List<Note> listNotes)
     {
-        mRecyclerView = (RecyclerView) mViewFragment.findViewById(R.id.recyclerCards);
         mLayoutManager = new LinearLayoutManager(mActivity);
         mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
