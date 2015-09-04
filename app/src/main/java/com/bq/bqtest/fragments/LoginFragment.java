@@ -48,15 +48,6 @@ public class LoginFragment extends BQTestFragment
     @OnClick(R.id.btLogin)
     public void doLogin()
     {
-        EvernoteHelper evernoteHelper = SingleData.getInstance().getmEvernoteHelper();
-        EvernoteSession evernoteSession = SingleData.getInstance().getmEvernoteSession();
-        if (!evernoteSession.isLoggedIn())
-        {
-            evernoteHelper.loginUser(mActivity, evernoteSession);
-        }
-        else
-        {
-            ((HomeActivity) mActivity).goToListNotes();
-        }
+        ((HomeActivity)mActivity).doLogin();
     }
 }

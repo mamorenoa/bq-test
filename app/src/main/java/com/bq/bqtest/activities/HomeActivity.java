@@ -10,6 +10,8 @@ import com.bq.bqtest.data.SingleData;
 import com.bq.bqtest.fragments.BQTestFragment;
 import com.bq.bqtest.fragments.LoginFragment;
 import com.bq.bqtest.fragments.NotesFragment;
+import com.bq.bqtest.helpers.EvernoteHelper;
+import com.evernote.client.android.EvernoteSession;
 import com.evernote.client.android.login.EvernoteLoginFragment;
 
 import butterknife.Bind;
@@ -18,7 +20,6 @@ import butterknife.ButterKnife;
 
 public class HomeActivity extends BQTestActivity implements EvernoteLoginFragment.ResultCallback
 {
-
     //Views
     @Bind(R.id.coordinatorContent)
     CoordinatorLayout mCoordinatorContent;
@@ -58,6 +59,19 @@ public class HomeActivity extends BQTestActivity implements EvernoteLoginFragmen
         FragmentTransaction ft = mFragmentManager.beginTransaction();
         ft.add(R.id.main, fragment);
         ft.commit();
+    }
+
+    public void doLogin()
+    {
+        EvernoteSession evernoteSession = SingleData.getInstance().getmEvernoteSession();
+        if (!evernoteSession.isLoggedIn())
+        {
+            evernoteSession.authenticate(this);
+
+        } else
+        {
+            goToListNotes();
+        }
     }
 
     @Override

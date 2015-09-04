@@ -17,9 +17,9 @@ import com.evernote.edam.type.Notebook;
 public class EvernoteHelper implements IEvernoteHelper
 {
     @Override
-    public void loginUser(Context context, EvernoteSession session)
+    public void loginUser(Activity activity, EvernoteSession session)
     {
-        session.authenticate((Activity)context);
+        session.authenticate(activity);
     }
 
     @Override
