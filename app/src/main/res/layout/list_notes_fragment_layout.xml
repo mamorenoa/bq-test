@@ -20,6 +20,15 @@
 
     </android.support.v4.widget.SwipeRefreshLayout>
 
+    <com.github.rahatarmanahmed.cpv.CircularProgressView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/progressView"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        app:cpv_animAutostart="true"
+        app:cpv_indeterminate="true" />
+
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/addNote"
         android:layout_width="wrap_content"

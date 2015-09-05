@@ -15,4 +15,6 @@
     <!-- Cards Screen -->
     <dimen name="card_height">100dp</dimen>
 
+    <!-- Create Note Screen -->
+    <dimen name="edit_text_content_height">300dp</dimen>
 </resources>

@@ -23,6 +23,7 @@ import com.evernote.client.android.EvernoteSession;
 import com.evernote.edam.type.Note;
 import com.evernote.edam.type.Notebook;
 import com.evernote.edam.type.User;
+import com.github.rahatarmanahmed.cpv.CircularProgressView;
 
 import java.util.List;
 
@@ -46,6 +47,8 @@ public class NotesFragment extends BQTestFragment
     FloatingActionButton mFloatingActionBt;
     @Bind(R.id.swipeRefreshLayout)
     SwipeRefreshLayout mSwipeRefreshLayout;
+    @Bind(R.id.progressView)
+    CircularProgressView mProgressView;
 
     //View Managers
     private RecyclerView.Adapter mAdapter;
@@ -237,6 +240,7 @@ public class NotesFragment extends BQTestFragment
 
     private void showListNotes(List<Note> listNotes)
     {
+        mProgressView.setVisibility(View.GONE);
         mListNotes = listNotes;
         mLayoutManager = new LinearLayoutManager(mActivity);
         mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
