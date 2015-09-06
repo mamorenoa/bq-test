@@ -24,3 +24,5 @@ Esta funcionalidad se ha desarrollado en la rama feature/detailNote. Al pulsar e
 
 ## Crear nota
 Esta funcionalidad se ha desarrollado en la rama feature/createNotes. El usuario puede crear una nota introduciendo únicamente un título y un contenido de la misma. Una vez introducida la nota, el fragment de creación de notas (CreateNotesFragment) avisa al fragment listado (NotesFragment) para que actualice su contenido mediante el listener IRefreshFragmentData. 
+
+## OCR
