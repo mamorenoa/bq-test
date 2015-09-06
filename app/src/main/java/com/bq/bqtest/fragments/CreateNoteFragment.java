@@ -1,6 +1,7 @@
 package com.bq.bqtest.fragments;
 
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.text.Editable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +15,10 @@ import com.bq.bqtest.R;
 import com.bq.bqtest.activities.HomeActivity;
 import com.bq.bqtest.data.SingleData;
 import com.bq.bqtest.helpers.EvernoteHelper;
+import com.bq.bqtest.interfaces.IEvernoteHelperResultListener;
 import com.evernote.client.android.EvernoteSession;
+import com.evernote.client.android.EvernoteUtil;
+import com.evernote.edam.type.Note;
 
 import butterknife.Bind;
 import butterknife.BindString;
@@ -31,8 +35,6 @@ public class CreateNoteFragment extends BQTestFragment
     EditText mEtTitle;
     @Bind(R.id.etContent)
     EditText mEtContent;
-    @Bind(R.id.btCreate)
-    Button mBtCreate;
 
     //Strings
     @BindString(R.string.create_note_title_mandatory)
@@ -40,11 +42,15 @@ public class CreateNoteFragment extends BQTestFragment
     @BindString(R.string.create_note_content_mandatory)
     String mStrContentMandatory;
 
-    public static CreateNoteFragment newInstance()
-    {
-        CreateNoteFragment f = new CreateNoteFragment();
-        return f;
-    }
+    //Data
+    private Note mNote;
+    private String mNotebookId;
+    private NotesFragment mFragmentRefresh;
+
+    //Data managers.
+    private EvernoteHelper mEvernoteHelper;
+
+    private CreateNoteFragment mInstance;
 
     @Override
     public View onCreateView(LayoutInflater inf, ViewGroup container, Bundle savedInstanceState)
@@ -52,7 +58,16 @@ public class CreateNoteFragment extends BQTestFragment
         super.onCreateView(inf, container, savedInstanceState);
         mViewFragment = inflater.inflate(R.layout.create_note_fragment_layout, container, false);
         ButterKnife.bind(this, mViewFragment);
+        mEvernoteHelper = new EvernoteHelper();
         return mViewFragment;
+    }
+
+    public void onCreate(Bundle bundle)
+    {
+        super.onCreate(bundle);
+        mInstance = this;
+        mNotebookId = getArguments().getString("notebookId");
+        mFragmentRefresh = (NotesFragment)getArguments().getSerializable("fragmentRefresh");
     }
 
     @Override
@@ -94,7 +109,37 @@ public class CreateNoteFragment extends BQTestFragment
         else
         {
             //Title and content fill, create note
+            mNote = new Note();
+            mNote.setTitle(mEtTitle.getText().toString());
+            String content = EvernoteUtil.NOTE_PREFIX
+                    + mEtContent.getText().toString()
+                    + EvernoteUtil.NOTE_SUFFIX;
+            mNote.setContent(content);
+            mNote.setNotebookGuid(mNotebookId);
+            mEvernoteHelper.createNote(mActivity, SingleData.getInstance().getmEvernoteSession(), mNote, new IEvernoteHelperResultListener()
+            {
+                @Override
+                public void onResult(Object result)
+                {
+                    mFragmentRefresh.onRefreshData();
+                    mInstance.getFragmentManager().popBackStack();
+                }
 
+                @Override
+                public void onError(String error)
+                {
+                }
+
+                @Override
+                public void onException(String exception)
+                {
+                }
+
+                @Override
+                public void onConnectionError()
+                {
+                }
+            });
         }
     }
 

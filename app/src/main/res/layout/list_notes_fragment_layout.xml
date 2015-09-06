@@ -5,7 +5,8 @@
     android:layout_height="match_parent"
     android:layout_alignParentBottom="true"
     android:layout_centerHorizontal="true"
-    android:background="@color/evernote_green">
+    android:background="@color/evernote_green"
+    xmlns:fab="http://schemas.android.com/apk/res-auto">
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefreshLayout"
@@ -21,21 +22,43 @@
     </android.support.v4.widget.SwipeRefreshLayout>
 
     <com.github.rahatarmanahmed.cpv.CircularProgressView
-        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/progressView"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_gravity="center"
         app:cpv_animAutostart="true"
-        app:cpv_indeterminate="true" />
+        app:cpv_indeterminate="true"/>
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/addNote"
+    <com.getbase.floatingactionbutton.FloatingActionsMenu
+        android:id="@+id/menuActions"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
-        android:layout_margin="16dp"
-        android:src="@drawable/ic_add"/>
+        fab:fab_labelsPosition="left">
+
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:id="@+id/addNote"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fab:fab_icon="@drawable/ic_add_note"
+            />
+
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:id="@+id/orderDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fab:fab_icon="@drawable/ic_order_date"
+            />
+
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:id="@+id/orderName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fab:fab_icon="@drawable/ic_order_title"
+            />
+
+    </com.getbase.floatingactionbutton.FloatingActionsMenu>
 
 </android.support.design.widget.CoordinatorLayout>
 
