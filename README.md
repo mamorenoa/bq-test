@@ -23,6 +23,6 @@ Se ha incluido un menu desplegable mediante la vista FloatingActionsMenu. Dicha 
 Esta funcionalidad se ha desarrollado en la rama feature/detailNote. Al pulsar en cada nota de la lista se muestra un fragment (DetailNoteFragment) con el contenido de la misma (título, fecha de creación y contenido). La clase RecyclerView no cuenta con un listener de clicks por defecto, se ha implementado uno propio (OnItemRecyclerClickListener). El contenido de la nota se muestra en una vista TextView como HTML. Una vez se ha finalizado esta feature, se ha mergeado con la rama develop y ha sido eliminada.
 
 ## Crear nota
-Esta funcionalidad se ha desarrollado en la rama feature/createNotes. El usuario puede crear una nota introduciendo únicamente un título y un contenido de la misma. Una vez introducida la nota, el fragment de creación de notas (CreateNotesFragment) avisa al fragment listado (NotesFragment) para que actualice su contenido mediante el listener IRefreshFragmentData. 
+Esta funcionalidad se ha desarrollado en la rama feature/createNotes. El usuario puede crear una nota introduciendo únicamente un título y un contenido de la misma. Una vez introducida la nota, el fragment de creación de notas (CreateNotesFragment) avisa al fragment listado (NotesFragment) para que actualice su contenido mediante el listener IRefreshFragmentData. Una vez se ha finalizado esta feature, se ha mergeado con la rama develop y ha sido eliminada.
 
 ## OCR
