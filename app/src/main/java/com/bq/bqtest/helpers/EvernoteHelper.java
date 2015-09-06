@@ -5,10 +5,12 @@ import android.content.Context;
 
 import com.bq.bqtest.interfaces.IEvernoteHelper;
 import com.bq.bqtest.interfaces.IEvernoteHelperResultListener;
+import com.bq.bqtest.tasks.CreateNotesTask;
 import com.bq.bqtest.tasks.GetNotebooksTask;
 import com.bq.bqtest.tasks.GetNotesTask;
 import com.bq.bqtest.tasks.GetUserTask;
 import com.evernote.client.android.EvernoteSession;
+import com.evernote.edam.type.Note;
 import com.evernote.edam.type.Notebook;
 
 /**
@@ -38,5 +40,11 @@ public class EvernoteHelper implements IEvernoteHelper
     public void getUserNotes(Context context, EvernoteSession session, Notebook notebook, IEvernoteHelperResultListener listener)
     {
         new GetNotesTask(context, session, notebook, listener).execute();
+    }
+
+    @Override
+    public void createNote(Context context, EvernoteSession session, Note note, IEvernoteHelperResultListener listener)
+    {
+        new CreateNotesTask(context, session, note, listener).execute();
     }
 }

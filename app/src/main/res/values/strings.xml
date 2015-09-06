@@ -15,4 +15,12 @@
 
     <!-- Details Note Screen -->
 
+    <!-- Create Note Screen -->
+    <string name="create_note_title">Create new note</string>
+    <string name="create_note_enter_title">Enter note title</string>
+    <string name="create_note_enter_content">Enter note content</string>
+    <string name="create_note_action">Create</string>
+    <string name="create_note_title_mandatory">Title note is a mandatory parameter</string>
+    <string name="create_note_content_mandatory">Content note is a mandatory parameter</string>
+
 </resources>

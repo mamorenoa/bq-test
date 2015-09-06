@@ -17,6 +17,5 @@ public interface IEvernoteHelper
     void getUserInfo(Context context, EvernoteSession session, IEvernoteHelperResultListener listener);
     void getUserNotebooks(Context context, EvernoteSession session, IEvernoteHelperResultListener listener);
     void getUserNotes(Context context, EvernoteSession session, Notebook notebook, IEvernoteHelperResultListener listener);
-
-
+    void createNote(Context context, EvernoteSession session, Note note, IEvernoteHelperResultListener listener);
 }

@@ -2,7 +2,6 @@ package com.bq.bqtest.fragments;
 
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -18,12 +17,18 @@ import com.bq.bqtest.adapters.NotesAdapter;
 import com.bq.bqtest.data.SingleData;
 import com.bq.bqtest.helpers.EvernoteHelper;
 import com.bq.bqtest.interfaces.IEvernoteHelperResultListener;
+import com.bq.bqtest.interfaces.IRefreshData;
+import com.bq.bqtest.utils.ComparatorNotesDate;
+import com.bq.bqtest.utils.ComparatorNotesTitle;
 import com.bq.bqtest.utils.OnItemClickListener;
 import com.evernote.client.android.EvernoteSession;
 import com.evernote.edam.type.Note;
 import com.evernote.edam.type.Notebook;
 import com.evernote.edam.type.User;
+import com.github.rahatarmanahmed.cpv.CircularProgressView;
 
+import java.io.Serializable;
+import java.util.Collections;
 import java.util.List;
 
 import butterknife.Bind;
@@ -34,7 +39,7 @@ import butterknife.OnClick;
 /**
  * Created by miguelangel on 1/9/15.
  */
-public class NotesFragment extends BQTestFragment
+public class NotesFragment extends BQTestFragment implements Serializable, IRefreshData
 {
 
     //Views
@@ -42,10 +47,10 @@ public class NotesFragment extends BQTestFragment
     CoordinatorLayout mCoordinatorContent;
     @Bind(R.id.recyclerCards)
     RecyclerView mRecyclerView;
-    @Bind(R.id.addNote)
-    FloatingActionButton mFloatingActionBt;
     @Bind(R.id.swipeRefreshLayout)
     SwipeRefreshLayout mSwipeRefreshLayout;
+    @Bind(R.id.progressView)
+    CircularProgressView mProgressView;
 
     //View Managers
     private RecyclerView.Adapter mAdapter;
@@ -55,6 +60,8 @@ public class NotesFragment extends BQTestFragment
     private User mUser;
     private List<Notebook> mListNotebooks;
     private List<Note> mListNotes;
+    private NotesFragment mInstance;
+
 
     //Data Managers
     private EvernoteSession mEvernoteSession;
@@ -88,7 +95,6 @@ public class NotesFragment extends BQTestFragment
         }
     };
 
-
     public static NotesFragment newInstance()
     {
         NotesFragment f = new NotesFragment();
@@ -101,12 +107,18 @@ public class NotesFragment extends BQTestFragment
         super.onCreateView(inf, container, savedInstanceState);
         mViewFragment = inflater.inflate(R.layout.list_notes_fragment_layout, container, false);
         ButterKnife.bind(this, mViewFragment);
+        mInstance = this;
         mEvernoteHelper = SingleData.getInstance().getmEvernoteHelper();
         mEvernoteSession = SingleData.getInstance().getmEvernoteSession();
         getUserLoginInfo();
         getUserNotebooks();
         setRefreshLayout();
         return mViewFragment;
+    }
+
+    public void onResume()
+    {
+        super.onResume();
     }
 
     @Override
@@ -237,6 +249,7 @@ public class NotesFragment extends BQTestFragment
 
     private void showListNotes(List<Note> listNotes)
     {
+        mProgressView.setVisibility(View.GONE);
         mListNotes = listNotes;
         mLayoutManager = new LinearLayoutManager(mActivity);
         mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -253,11 +266,35 @@ public class NotesFragment extends BQTestFragment
         FragmentTransaction ft = mActivity.getSupportFragmentManager().beginTransaction();
         CreateNoteFragment cf = new CreateNoteFragment();
         Bundle args = new Bundle();
+        args.putString("notebookId", mListNotebooks.get(0).getGuid());
+        args.putSerializable("fragmentRefresh", mInstance);
         cf.setArguments(args);
         ft.setCustomAnimations(R.anim.slide_in_bottom, R.anim.slide_out_bottom, R.anim.slide_out_top, R.anim.slide_out_bottom);
         ft.add(R.id.main, cf, NotesFragment.class.getSimpleName());
         ft.addToBackStack(NotesFragment.class.getSimpleName());
         ft.commit();
+    }
+
+    @OnClick(R.id.orderDate)
+    public void orderDate()
+    {
+        Collections.sort(mListNotes, new ComparatorNotesDate());
+        showListNotes(mListNotes);
+    }
+
+    @OnClick(R.id.orderName)
+    public void orderName()
+    {
+        Collections.sort(mListNotes, new ComparatorNotesTitle());
+        showListNotes(mListNotes);
+    }
+
+    @Override
+    public void onRefreshData()
+    {
+        mProgressView.setVisibility(View.VISIBLE);
+        getUserNotebooks();
+        setRefreshLayout();
     }
 }
 
