@@ -28,5 +28,5 @@ Esta funcionalidad se ha desarrollado en la rama feature/createNotes. El usuario
 ## OCR
 
 ## Consideraciones finales
--La parte del OCR no se ha podido implementar por falta de tiempo. La opción que se valoró para implementar esta parte fue la adaptación a Android de la librería open source tesseract (tesstwo).
--La versión final del código de la app se ha taggeado como 1.0.0 en github. El código final de la app se encuentra en la rama master como release.
+- La parte del OCR no se ha podido implementar por falta de tiempo. La opción que se valoró para implementar esta parte fue la adaptación a Android de la librería open source tesseract (tesstwo).
+- La versión final del código de la app se ha taggeado como 1.0.0 en github. El código final de la app se encuentra en la rama master como release.
