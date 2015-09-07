@@ -26,3 +26,7 @@ Esta funcionalidad se ha desarrollado en la rama feature/detailNote. Al pulsar e
 Esta funcionalidad se ha desarrollado en la rama feature/createNotes. El usuario puede crear una nota introduciendo únicamente un título y un contenido de la misma. Una vez introducida la nota, el fragment de creación de notas (CreateNotesFragment) avisa al fragment listado (NotesFragment) para que actualice su contenido mediante el listener IRefreshFragmentData. Una vez se ha finalizado esta feature, se ha mergeado con la rama develop y ha sido eliminada.
 
 ## OCR
+
+## Consideraciones finales
+-La parte del OCR no se ha podido implementar por falta de tiempo. La opción que se valoró para implementar esta parte fue la adaptación a Android de la librería open source tesseract (tesstwo).
+-La versión final del código de la app se ha taggeado como 1.0.0 en github. El código final de la app se encuentra en la rama master como release.
