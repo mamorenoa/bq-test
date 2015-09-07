@@ -1,0 +1,26 @@
+<LinearLayout
+    android:id="@+id/linearContent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/evernote_green">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/big_margin"
+        android:gravity="center"
+        android:text="@string/login_title"
+        android:textSize="@dimen/login_title"/>
+
+    <Button
+        android:id="@+id/btLogin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/normal_margin"
+        android:text="@string/login_button"
+        />
+</LinearLayout>
+

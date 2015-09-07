@@ -1,9 +1,29 @@
 <resources>
-    <string name="app_name">BQTest</string>
+    <!-- General -->
+    <string name="app_name">Test</string>
+    <string name="connection_error">Connection Error</string>
+
     <!-- Login Screen -->
     <string name="login_title">Evernote client</string>
-    <string name="login_user_name">User Name</string>
-    <string name="login_user_password">User Password</string>
-    <string name="login_continue">Continue</string>
+    <string name="login_button">Login</string>
+    <string name="login_error">Error Login</string>
+
+    <!-- List Notes Screen -->
+    <string name="notes_user_logged">%s has logged into Evernote</string>
+    <string name="notes_user_logged_without_name">You have logged into Evernote</string>
+    <string name="notes_date">Created at %s</string>
+
+    <!-- Details Note Screen -->
+
+    <!-- Create Note Screen -->
+    <string name="create_note_title">Create new note</string>
+    <string name="create_note_enter_title">Enter note title</string>
+    <string name="create_note_enter_content">Enter note content</string>
+    <string name="create_note_action">Create</string>
+    <string name="create_note_ocr">Get data from OCR</string>
+    <string name="create_note_title_mandatory">Title note is a mandatory parameter</string>
+    <string name="create_note_content_mandatory">Content note is a mandatory parameter</string>
+
+
 
 </resources>
