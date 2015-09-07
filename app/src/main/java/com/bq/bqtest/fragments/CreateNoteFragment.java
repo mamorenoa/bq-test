@@ -1,22 +1,15 @@
 package com.bq.bqtest.fragments;
 
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
-import android.text.Editable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import com.bq.bqtest.R;
-import com.bq.bqtest.activities.HomeActivity;
 import com.bq.bqtest.data.SingleData;
 import com.bq.bqtest.helpers.EvernoteHelper;
 import com.bq.bqtest.interfaces.IEvernoteHelperResultListener;
-import com.evernote.client.android.EvernoteSession;
 import com.evernote.client.android.EvernoteUtil;
 import com.evernote.edam.type.Note;
 
@@ -67,7 +60,7 @@ public class CreateNoteFragment extends BQTestFragment
         super.onCreate(bundle);
         mInstance = this;
         mNotebookId = getArguments().getString("notebookId");
-        mFragmentRefresh = (NotesFragment)getArguments().getSerializable("fragmentRefresh");
+        mFragmentRefresh = (NotesFragment) getArguments().getSerializable("fragmentRefresh");
     }
 
     @Override
@@ -78,12 +71,12 @@ public class CreateNoteFragment extends BQTestFragment
 
     private boolean isTitleFieldFill()
     {
-        return ((mEtTitle!=null)&&(!mEtTitle.getText().toString().equalsIgnoreCase("")));
+        return ((mEtTitle != null) && (!mEtTitle.getText().toString().equalsIgnoreCase("")));
     }
 
     private boolean isContentFieldFill()
     {
-        return ((mEtContent!=null)&&(!mEtContent.getText().toString().equalsIgnoreCase("")));
+        return ((mEtContent != null) && (!mEtContent.getText().toString().equalsIgnoreCase("")));
     }
 
     @OnClick(R.id.btCreate)
@@ -93,20 +86,17 @@ public class CreateNoteFragment extends BQTestFragment
         {
             //Title fill and content not fill
             mEtContent.setError(mStrContentMandatory);
-        }
-        else if ((!isTitleFieldFill()) && (isContentFieldFill()))
+        } else if ((!isTitleFieldFill()) && (isContentFieldFill()))
         {
             //Title not fill and content fill
             mEtTitle.setError(mStrTitleMandatory);
 
-        }
-        else if ((!isTitleFieldFill()) && (isContentFieldFill()))
+        } else if ((!isTitleFieldFill()) && (isContentFieldFill()))
         {
             //Title not fill and content not fill
             mEtTitle.setError(mStrTitleMandatory);
             mEtContent.setError(mStrContentMandatory);
-        }
-        else
+        } else
         {
             //Title and content fill, create note
             mNote = new Note();
@@ -142,5 +132,12 @@ public class CreateNoteFragment extends BQTestFragment
             });
         }
     }
+
+    /*@OnClick(R.id.btDataOCR)
+    public void dateFromOCR()
+    {
+        Intent iOCR = new Intent(mActivity, SimpleAndroidOCRActivity.class);
+        mActivity.startActivity(iOCR);
+    }*/
 
 }

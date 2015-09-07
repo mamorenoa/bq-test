@@ -81,6 +81,13 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/normal_margin"
                     android:text="@string/create_note_action"/>
+
+                <Button
+                    android:id="@+id/btDataOCR"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/normal_margin"
+                    android:text="@string/create_note_action"/>
             </LinearLayout>
 
         </android.support.v7.widget.CardView>

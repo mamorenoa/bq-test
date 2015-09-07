@@ -17,10 +17,10 @@ import com.bq.bqtest.adapters.NotesAdapter;
 import com.bq.bqtest.data.SingleData;
 import com.bq.bqtest.helpers.EvernoteHelper;
 import com.bq.bqtest.interfaces.IEvernoteHelperResultListener;
-import com.bq.bqtest.interfaces.IRefreshData;
+import com.bq.bqtest.interfaces.IRefreshFragmentData;
 import com.bq.bqtest.utils.ComparatorNotesDate;
 import com.bq.bqtest.utils.ComparatorNotesTitle;
-import com.bq.bqtest.utils.OnItemClickListener;
+import com.bq.bqtest.utils.OnItemRecyclerClickListener;
 import com.evernote.client.android.EvernoteSession;
 import com.evernote.edam.type.Note;
 import com.evernote.edam.type.Notebook;
@@ -39,9 +39,8 @@ import butterknife.OnClick;
 /**
  * Created by miguelangel on 1/9/15.
  */
-public class NotesFragment extends BQTestFragment implements Serializable, IRefreshData
+public class NotesFragment extends BQTestFragment implements Serializable, IRefreshFragmentData
 {
-
     //Views
     @Bind(R.id.coordinatorContent)
     CoordinatorLayout mCoordinatorContent;
@@ -76,7 +75,7 @@ public class NotesFragment extends BQTestFragment implements Serializable, IRefr
     String mStrConnectionError;
 
     //Cards Listener
-    private OnItemClickListener.OnItemClickCallback onItemClickCallback = new OnItemClickListener.OnItemClickCallback()
+    private OnItemRecyclerClickListener.OnItemClickCallback onItemClickCallback = new OnItemRecyclerClickListener.OnItemClickCallback()
     {
         @Override
         public void onItemClicked(View view, int position)
