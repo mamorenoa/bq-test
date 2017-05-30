@@ -1,5 +1,3 @@
-# bq-test
-
 La documentación de la prueba consta, en primer lugar, de una pequeña introducción de la arquitectura y organización de la aplicación. Posteriormente, se realiza una descripción de cada caso de uso de la prueba que se corresponde con cada rama feature que se ha ido generando en git mediante el uso de gitflow. 
 
 ## Aspectos generales
